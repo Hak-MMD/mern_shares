@@ -10,7 +10,7 @@ const protect = (req,res, next) => {
 
     const token = authHeader.split(' ')[1]
 
-    console.log(process.env.ACCESS_SECRET);
+    // console.log(process.env.ACCESS_SECRET);
 
     jwt.verify(
         token,
