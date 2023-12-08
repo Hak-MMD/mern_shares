@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import '../../App.css';
 import Header from '../../components/Header';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { getTransact } from './stockApiSlice';
 import { useNavigate, useParams } from 'react-router-dom';
+import { setBuyStockPrice, setSellStockAvPrice, setSellStockNewPrice } from './stockSlice';
+import { store } from '../../app/store';
 
 
 function SingleStockDash() {
+    const effectRan = useRef(false)
     const params = useParams();
     const navigate = useNavigate();
     const [stock, setStock] = useState({});
@@ -29,8 +32,25 @@ function SingleStockDash() {
         }
     };
 
+    const buyFunc = async () => {
+        await store.dispatch(setBuyStockPrice(stock.newPrice));
+        navigate('/stocks/buy/' + params.code) 
+    };
+    const sellFunc = async () => {
+        await store.dispatch(setSellStockAvPrice(stock.avPrice));
+        await store.dispatch(setSellStockNewPrice(stock.newPrice));
+        navigate('/stocks/sell/' + params.code) 
+    };
+
+
     useEffect(() => {
-        getStockData();
+        if (effectRan.current === true) {
+            getStockData();
+        }
+        return () => {
+            effectRan.current = true
+        }
+        // console.log(params.code);
     }, []);
   return (
     <>
@@ -52,8 +72,8 @@ function SingleStockDash() {
             <p><span>All Profit: </span> {stock.allProfit}</p>
             </div>
             <div className="buttonsPublic">
-                <button onClick={() => { navigate(`/stocks/buy/${params.code}`) }} style={{ width: 110 }} className='btn'>Buy</button>    
-                <button onClick={() => { navigate(`/stocks/buy/${params.code}`) }} style={{ width: 110 }} className='btn'>Sell</button>    
+                <button onClick={() => { buyFunc() }} style={{ width: 110 }} className='btn'>Buy</button>    
+                <button onClick={() => { sellFunc() }} style={{ width: 110 }} className='btn'>Sell</button>    
             
             </div>
         </div>

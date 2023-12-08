@@ -1,5 +1,9 @@
 const express = require('express');
-const { createAllStocks, singleStock, findStocks, everyDay, checkStock, allTime, oneYear, fiveYears, monthly, getStocks, fiveDays, sixMonths, saveStock, getSavedStocks, delSavedStock, getFavStocks, checkSaveStock, buyShares, getPortfolio, getTransact } = require('../controllers/stockControllers');
+const { createAllStocks, singleStock, findStocks, everyDay, 
+    checkStock, allTime, oneYear, fiveYears, monthly, 
+    getStocks, fiveDays, sixMonths, saveStock, getSavedStocks, 
+    delSavedStock, getFavStocks, checkSaveStock, buyShares, 
+    getPortfolio, getTransact, sellStock } = require('../controllers/stockControllers');
 const apiLimiter = require('../middlewares/rateLimiter');
 const router = express.Router();
 
@@ -12,6 +16,7 @@ router.patch('/save/:code', saveStock);
 router.post('/checkSave/:code', checkSaveStock);
 router.post('/check/:code', checkStock);
 router.patch('/buy/:code', buyShares);
+router.patch('/sell/:code', sellStock);
 router.patch('/delSaved/:code', delSavedStock);
 router.get('/getSaved/:code', getSavedStocks);
 router.get('/getFav', getFavStocks);

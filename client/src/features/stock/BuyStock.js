@@ -13,8 +13,8 @@ function BuyStock() {
   const [count, setCount] = useState(0);
   const [pay, setPay] = useState(0);
   // const effectRan = useRef(false)
-  // const price = useSelector((state) => state.stock.price);
-  const price = 235; //for testing
+  const price = useSelector((state) => state.stock.price);
+  // const price = 235; //for testing
   const wallet = useSelector((state) => state.user.wallet);
 
 

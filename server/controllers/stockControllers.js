@@ -441,11 +441,11 @@ const buyShares = async (req,res) => {
 
         if (!transaction) {
             const newTransact = await TransactModel.create({ userId: user.id, code: stock.code, amount, price, name: stock.name });//check this line(justify create function)!!!!
-            return res.status(201).json(newTransact);
+            return res.status(201).json({newTransact, wallet: user.wallet});
 
         }
 
-        res.status(200).json({transaction, message: 'Transaction was completed successfully!'});
+        res.status(200).json({transaction, wallet: user.wallet, message: 'Transaction was completed successfully!'});
     } catch (error) {
         console.log(error);
     }
@@ -473,7 +473,7 @@ const getTransact = async (req, res) => {
                 console.error('error:', error); // Print the error if one occurred
                 return res.status(400).json({ message: `Single stock endpoint error! Status: ${response.statusCode} Response: ${response}` });
             }
-            // console.log(dailyParse(body));
+            console.log(dailyParse(body));
             
             const result = dailyParse(body);
             // console.log(result);
@@ -494,7 +494,7 @@ const getTransact = async (req, res) => {
                 price: (transaction.price).toFixed(2),
                 oneProfit: (transaction.price - obj.close).toFixed(2),
                 allProfit: ((transaction.price - obj.close) * transaction.amount).toFixed(2),
-                newPrice: (obj.close).toFixed(2)
+                newPrice: obj.close
             });
         });
     } catch (error) {
@@ -502,6 +502,29 @@ const getTransact = async (req, res) => {
     }
 };
 
+
+const sellStock = async (req, res) => {
+    const { code } = req.params;
+    const { amount, avPrice } = req.body;
+
+    try {
+
+        const user = await UserModel.findOne({ email: req.email });
+        const stock = await StockModel.findOne({ code });
+
+        user.wallet = user.wallet + avPrice * amount;
+        await user.save();
+
+        const transaction = await TransactModel.findOne({ userId: user.id, stockId: stock.id });
+        transaction.amount -= amount;
+        await transaction.save();
+
+
+        res.status(200).json({transaction, wallet: user.wallet, message: 'Transaction was completed successfully!'});
+    } catch (error) {
+        console.log(error);
+    }
+};
     
 
 
@@ -526,4 +549,5 @@ module.exports = {
     checkStock,
     getPortfolio,
     getTransact, 
+    sellStock,
 }

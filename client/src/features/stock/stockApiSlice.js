@@ -121,7 +121,8 @@ const checkStock = async (code) => {
 const buyStock = async (code, amount, price) => {
     return apiFetch.patch(`/stock/buy/${code}`, { amount, price }).then((response) => {
         if (response.status == 200 || response.status == 201) {
-             
+            const wallet = response.data.wallet;
+            store.dispatch(setWallet(wallet));       
             return response.data;
         } else {
             return false;
@@ -138,7 +139,7 @@ const getPortfolio = async () => {
 };
 
 const getTransact = async (code) => {
-    return apiFetch.get(`/stock/getTransact/:${code}`).then((response) => {
+    return apiFetch.get(`/stock/getTransact/${code}`).then((response) => {
         if (response.status == 200) {  
             return response.data;
         } else {
@@ -146,6 +147,18 @@ const getTransact = async (code) => {
         }    
     }).catch((e) => {
         console.error(e);
+    });
+};
+
+const sellStock = async (code, amount, avPrice) => {
+    return apiFetch.patch(`/stock/buy/${code}`, { amount, avPrice }).then((response) => {
+        if (response.status == 200) {
+            const wallet = response.data.wallet;
+            store.dispatch(setWallet(wallet));        
+            return response.data;
+        } else {
+            return false;
+        }
     });
 };
 
@@ -165,5 +178,6 @@ export {
     buyStock,
     checkStock,
     getPortfolio,
-    getTransact
+    getTransact,
+    sellStock,
 }

@@ -35,7 +35,7 @@ function App() {
               <Route path='dash' element={<Dashboard />} />
               <Route path='buy/:code' element={<BuyStock />} />
               <Route path='sell/:code' element={<SellStock />} />
-              <Route path='dash/:id' element={<SingleStockDash />} />
+              <Route path='dash/:code' element={<SingleStockDash />} />
             </Route>
           </Route>
         </Route>
