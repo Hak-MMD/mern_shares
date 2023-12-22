@@ -11,13 +11,13 @@ function SellStock() {
   const [count, setCount] = useState(0);
   const [profit, setProfit] = useState(0);
   const wallet = useSelector((state) => state.user.wallet);
-  const amount = useSelector((state) => state.user.wallet);
+  const amount = useSelector((state) => state.stock.amount);
   // const amount = 3;
   const newPrice = useSelector((state) => state.stock.newPrice);
   const avPrice = useSelector((state) => state.stock.avPrice);
 
   const getSellStock = async () => {
-    await sellStock(params.code, count, avPrice);
+    await sellStock(params.code, count, profit, avPrice);
     navigate('/stocks/success')
   };
 
@@ -32,7 +32,8 @@ function SellStock() {
   };
 
     useEffect(() => {
-      setProfit((count * avPrice) - (count * newPrice));
+      setProfit((count * avPrice).toFixed(2) - (count * newPrice).toFixed(2));
+      console.log(amount);
       // setPay(profit.parseInt().toFixed(2));
       // setCount(profit / params.profit);
     }, [count]);
@@ -62,6 +63,7 @@ function SellStock() {
           {
             count > amount ? 
             ( 
+              
             <>
               <button style={{ backgroundColor: 'grey', fontSize: '25px' }} className='btn'>+</button>  
               <p style={{ marginBottom: 5, textAlign: 'left', marginLeft: 20 }}>Profit:</p>

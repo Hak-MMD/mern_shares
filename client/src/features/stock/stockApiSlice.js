@@ -150,10 +150,11 @@ const getTransact = async (code) => {
     });
 };
 
-const sellStock = async (code, amount, avPrice) => {
-    return apiFetch.patch(`/stock/buy/${code}`, { amount, avPrice }).then((response) => {
+const sellStock = async (code, amount, profit, avPrice) => {
+    return apiFetch.patch(`/stock/sell/${code}`, { amount, profit, avPrice }).then((response) => {
         if (response.status == 200) {
             const wallet = response.data.wallet;
+            console.log(wallet);
             store.dispatch(setWallet(wallet));        
             return response.data;
         } else {

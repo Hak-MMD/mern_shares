@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const stockSlice = createSlice({
     name: 'stock',
-    initialState: { price: undefined, avPrice: undefined, newPrice: undefined },
+    initialState: { price: 0, avPrice: 0, newPrice: 0, amount: 0 },
     reducers: {
         setBuyStockPrice: (state, action) => {    
             state.price = action.payload;
@@ -16,10 +16,14 @@ const stockSlice = createSlice({
             state.newPrice = action.payload;
             // console.log(state.prize);
         },
+        setSellStockAmount: (state, action) => {    
+            state.amount = action.payload;
+            // console.log(state.prize);
+        },
     }
 });
 
-export const { setBuyStockPrice, setSellStockAvPrice, setSellStockNewPrice } = stockSlice.actions;
+export const { setBuyStockPrice, setSellStockAvPrice, setSellStockNewPrice, setSellStockAmount } = stockSlice.actions;
 
 export default stockSlice.reducer;
 

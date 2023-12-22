@@ -4,7 +4,7 @@ import Header from '../../components/Header';
 import { AiFillLike, AiOutlineLike } from 'react-icons/ai';
 import { getTransact } from './stockApiSlice';
 import { useNavigate, useParams } from 'react-router-dom';
-import { setBuyStockPrice, setSellStockAvPrice, setSellStockNewPrice } from './stockSlice';
+import { setBuyStockPrice, setSellStockAmount, setSellStockAvPrice, setSellStockNewPrice } from './stockSlice';
 import { store } from '../../app/store';
 
 
@@ -37,8 +37,9 @@ function SingleStockDash() {
         navigate('/stocks/buy/' + params.code) 
     };
     const sellFunc = async () => {
-        await store.dispatch(setSellStockAvPrice(stock.avPrice));
+        await store.dispatch(setSellStockAvPrice(stock.price));
         await store.dispatch(setSellStockNewPrice(stock.newPrice));
+        await store.dispatch(setSellStockAmount(stock.amount));
         navigate('/stocks/sell/' + params.code) 
     };
 
@@ -52,6 +53,7 @@ function SingleStockDash() {
         }
         // console.log(params.code);
     }, []);
+
   return (
     <>
     <Header />

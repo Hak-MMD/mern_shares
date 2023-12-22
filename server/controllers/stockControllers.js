@@ -505,19 +505,24 @@ const getTransact = async (req, res) => {
 
 const sellStock = async (req, res) => {
     const { code } = req.params;
-    const { amount, avPrice } = req.body;
+    const { amount, profit, avPrice } = req.body;
 
     try {
 
         const user = await UserModel.findOne({ email: req.email });
-        const stock = await StockModel.findOne({ code });
 
-        user.wallet = user.wallet + avPrice * amount;
+        user.wallet += (avPrice + profit);
         await user.save();
 
-        const transaction = await TransactModel.findOne({ userId: user.id, stockId: stock.id });
+        const transaction = await TransactModel.findOne({ userId: user.id, code });
+        console.log(transaction);
+
         transaction.amount -= amount;
         await transaction.save();
+        if (transaction.amount == 0) {
+            await transaction.remove();
+            res.status(200).json({wallet: user.wallet, message: 'Transaction was completed successfully!'});
+        }
 
 
         res.status(200).json({transaction, wallet: user.wallet, message: 'Transaction was completed successfully!'});

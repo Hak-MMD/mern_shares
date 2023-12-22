@@ -64,6 +64,7 @@ const Logout = async () => {
 
 const getMe = async () => {
     return apiFetch.get(`/user/getMe/`).then((response) => {
+        console.log(store);
         store.dispatch(setWallet(response.data.wallet));
         return response.data
     }).catch((e) => {
